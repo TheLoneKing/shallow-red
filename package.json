@@ -1,0 +1,33 @@
+{
+  "name": "shallow-red",
+  "version": "0.0.1",
+  "description": "A Chess bot for Lichess",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheLoneKing/shallow-red.git"
+  },
+  "keywords": [
+    "chess",
+    "lichess",
+    "chess-bot",
+    "game",
+    "bot"
+  ],
+  "author": "TheLoneKing",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/TheLoneKing/shallow-red/issues"
+  },
+  "homepage": "https://github.com/TheLoneKing/shallow-red#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "express": "^4.16.3",
+    "lodash": "^4.17.10",
+    "oboe": "^2.1.4",
+    "stockfish": "^8.0.0"
+  }
+}
