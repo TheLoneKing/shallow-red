@@ -4,7 +4,7 @@ let bestRegex    = /bestmove\s+(\S+)/;
 let moveRegex    = /makemove\s+(\S+)/;
 
 class StockfishEngine {
-    constructor(options = {}, api) {
+    constructor(options = {}) {
         let self = this;
         this.engine = stockfish();
         this.options = _.defaults(options, {
@@ -18,7 +18,7 @@ class StockfishEngine {
         this.best_move;
         this.moves = [];
 
-        this.api = api;
+        this.api;
         this.gameId;
 
         // Initialize engine to UCI standard
@@ -62,7 +62,7 @@ class StockfishEngine {
      * @param {String} command The UCI-compatible command to feed the engine
      * @param {Function} callback (Optional) The callback to invoke upon completion
      */
-    send(commmand, callback) {
+    send(command, callback) {
         if (_.isFunction(callback)) {
             console.log('Setting command callback');
             this.callback = callback;
@@ -72,7 +72,7 @@ class StockfishEngine {
         }
 
         // In some cases, intercept command and extend with config settings
-        if (_.contains(command, 'makemove')) { // Check if we're sending `makemove` command, handle specially
+        if (_.includes(command, 'makemove')) { // Check if we're sending `makemove` command, handle specially
             const move = moveRegex.exec(command)[1];
             this.moves.push(move);
             command = `position ${this.position} moves ${this.moves.join(' ')}`;
@@ -139,7 +139,7 @@ class StockfishEngine {
      * @param {String} command The command to parse
      */
     parsePositionChange(command) {
-        if (!_.contains(command, 'moves')) { // If command doesn't have moves, just save position
+        if (!_.includes(command, 'moves')) { // If command doesn't have moves, just save position
             const fen = command.slice(9);
             console.log('Parsed position: ', fen);
             this.position = fen;
@@ -170,6 +170,32 @@ class StockfishEngine {
      */
     setGameId(gameId) {
         this.gameId = gameId;
+    }
+
+    /**
+     * Set the api to use
+     * @param {String} api The api to use
+     */
+    setApi(api) {
+        this.api = api;
+    }
+
+    /**
+     * Calculate and play next move based on the
+     * previous moves. The previous moves are 
+     * contained in the moves array.
+     * @param {Array} moves The moves played so far
+     * @param {Boolean} isMyturn Is it currently the bot's turn to play
+     */
+    playNextMove(moves, isMyTurn) {
+        if (isMyTurn) {
+            if (moves !== undefined && moves.length > 0) {
+                // Update other player's move in the engine
+                let lastMove = moves[moves.length - 1];
+                this.send(`makemove ${lastMove}`);
+            }
+            this.findAndMakeBestMove();
+        }
     }
 }
 

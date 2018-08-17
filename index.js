@@ -3,6 +3,9 @@ const PORT = process.env.PORT || 5000;
 
 const LichessApi = require('./api/lichess-api');
 const StockFishPlayer = require('./bots/stockfish-player');
+const ShallowRedBot = require('./bots/shallow-red-bot');
+
+const token = process.env.API_TOKEN;
 
 /**
  * Start a ShallowRedBot (lichess account defined by API_TOKEN) that listens for challenges
@@ -22,7 +25,7 @@ const StockFishPlayer = require('./bots/stockfish-player');
 
     async function startBot(token, player) {
         if (token) {
-            const robot = new RobotUser(new LichessApi(token), player);
+            const robot = new ShallowRedBot(new LichessApi(token), player);
             const username = (await robot.start()).data.username;
             return `<a href="https://lichess.org/@/${username}">${username}</a> on lichess.</h1><br/>`;
         }
@@ -31,7 +34,7 @@ const StockFishPlayer = require('./bots/stockfish-player');
     async function begin() {
         var links = "<h1>Challenge:</h1><br/>";
 
-        links += await startBot(process.env.API_TOKEN, new StockFishPlayer());
+        links += await startBot(token, new StockFishPlayer());
 
         // heroku wakeup server (not necessary otherwise)
 

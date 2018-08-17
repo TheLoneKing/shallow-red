@@ -21,6 +21,7 @@ class Game {
     start(gameId) {
         this.gameId = gameId;
         this.engine.setGameId(gameId);
+        this.engine.setApi(this.api);
         this.api.streamGame(gameId, (event) => this.handler(event));
     }
 
@@ -51,15 +52,9 @@ class Game {
     }
 
     playNextMove(previousMoves) {
-        const moves = (previousMoves === "") ? [] : previousMoves.split(" ");
-        if (this.isTurn(this.colour, moves)) {
-            if (moves !== undefined && moves.length > 0) {
-                // Update other player's move in the engine
-                let lastMove = moves[moves.length - 1];
-                this.engine.send(`makemove ${lastMove}`);
-            }
-            this.engine.findAndMakeBestMove();
-        }
+        let moves = (previousMoves === "") ? [] : previousMoves.split(" ");
+        let isMyTurn = this.isTurn(this.colour, moves);
+        this.engine.playNextMove(moves, isMyTurn);
     }
 
     playingAs(event) {
