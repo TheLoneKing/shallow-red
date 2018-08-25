@@ -6,6 +6,21 @@
  * getReply(chat event) returns chat message  
  * 
  */
+const twit              = require('twit');
+const consumerKey       = process.env.TWITTER_CONSUMER_KEY;
+const consumerSecret    = process.env.TWITTER_CONSUMER_SECRET;
+const accessToken       = process.env.TWITTER_ACCESS_TOKEN;
+const accessTokenSecret = process.env.TWITTER_ACCESS_TOKEN_SECRET;
+
+const config = {
+    consumer_key: consumerKey,
+    consumer_secret: consumerSecret,
+    access_token: accessToken,
+    access_token_secret: accessTokenSecret
+};
+
+const Twitter = new twit(config);
+
 class Game {
 
     /**
@@ -23,6 +38,22 @@ class Game {
         this.engine.setGameId(gameId);
         this.engine.setApi(this.api);
         this.api.streamGame(gameId, (event) => this.handler(event));
+
+        // Tweet about this game
+        this.tweetTheGame(this.gameId);
+    }
+
+    tweetTheGame(gameId) {
+        let tweet = {
+            status: `Started a new game on lichess at... https://lichess.org/${gameId}`
+        };
+        Twitter.post('statuses/update', tweet, (err, data, response) => {
+            if (err) {
+                console.error("Error while tweeting...");
+            } else {
+                console.log("Tweeted about the game successfully!");
+            }
+        });
     }
 
     handleChatLine(event) {

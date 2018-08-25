@@ -1,11 +1,11 @@
-const express    = require('express');
-const PORT = process.env.PORT || 5000;
+const express         = require('express');
+const PORT            = process.env.PORT || 5000;
 
-const LichessApi = require('./api/lichess-api');
+const LichessApi      = require('./api/lichess-api');
 const StockFishPlayer = require('./bots/stockfish-player');
-const ShallowRedBot = require('./bots/shallow-red-bot');
+const ShallowRedBot   = require('./bots/shallow-red-bot');
 
-const token = process.env.API_TOKEN;
+const token           = process.env.API_TOKEN;
 
 /**
  * Start a ShallowRedBot (lichess account defined by API_TOKEN) that listens for challenges
