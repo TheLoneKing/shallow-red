@@ -24,6 +24,9 @@
     "url": "https://github.com/TheLoneKing/shallow-red/issues"
   },
   "homepage": "https://github.com/TheLoneKing/shallow-red#readme",
+  "engines": {
+    "node": "8.11.3"
+  },
   "dependencies": {
     "axios": "^0.18.0",
     "express": "^4.16.3",
