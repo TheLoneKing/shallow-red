@@ -1,6 +1,6 @@
 {
   "name": "shallow-red",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A Chess bot for Lichess",
   "main": "index.js",
   "scripts": {
